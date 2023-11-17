@@ -43,7 +43,7 @@ static GLOBAL: Jemalloc = Jemalloc;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    let config = Config::init();
+    let config = Config::init(None);
     let servers = config.parse_servers().failed("Invalid configuration");
     let directory = config.parse_directory().failed("Invalid configuration");
 

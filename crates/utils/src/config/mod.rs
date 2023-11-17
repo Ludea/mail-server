@@ -143,25 +143,26 @@ impl Display for ServerProtocol {
 pub type Result<T> = std::result::Result<T, String>;
 
 impl Config {
-    pub fn init() -> Self {
-        let mut config_path = None;
+    pub fn init(mut config_path: Option<String>) -> Self {
         let mut found_param = false;
 
-        for arg in std::env::args().skip(1) {
-            if let Some((key, value)) = arg.split_once('=') {
-                if key.starts_with("--config") {
-                    config_path = value.trim().to_string().into();
+        if config_path.is_none() {
+            for arg in std::env::args().skip(1) {
+                if let Some((key, value)) = arg.split_once('=') {
+                    if key.starts_with("--config") {
+                        config_path = value.trim().to_string().into();
+                        break;
+                    } else {
+                        failed(&format!("Invalid command line argument: {key}"));
+                    }
+                } else if found_param {
+                    config_path = arg.into();
                     break;
+                } else if arg.starts_with("--config") {
+                    found_param = true;
                 } else {
-                    failed(&format!("Invalid command line argument: {key}"));
+                    failed(&format!("Invalid command line argument: {arg}"));
                 }
-            } else if found_param {
-                config_path = arg.into();
-                break;
-            } else if arg.starts_with("--config") {
-                found_param = true;
-            } else {
-                failed(&format!("Invalid command line argument: {arg}"));
             }
         }
 
