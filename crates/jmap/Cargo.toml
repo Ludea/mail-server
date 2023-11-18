@@ -8,7 +8,7 @@ resolver = "2"
 store = { path = "../store" }
 nlp = { path = "../nlp" }
 jmap_proto = { path = "../jmap-proto" }
-smtp = { path =  "../smtp" }
+smtp = { path =  "../smtp", features = ["local_delivery"] }
 utils = { path =  "../utils" }
 directory = { path =  "../directory" }
 smtp-proto = { git = "https://github.com/stalwartlabs/smtp-proto" }
